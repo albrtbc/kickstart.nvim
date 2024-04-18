@@ -1,7 +1,6 @@
 vim.keymap.set('n', '<c-n>', ':TablineBufferNext<CR>')
 vim.keymap.set('n', '<c-p>', ':TablineBufferPrevious<CR>')
 vim.keymap.set('n', '<leader>bc', ':bd<CR>')
-vim.keymap.set('n', '<c-w>', ':bd<CR>')
 
 vim.cmd [[
   set guioptions-=e " Use showtabline in gui vim
