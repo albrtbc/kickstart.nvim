@@ -87,11 +87,11 @@ P.S. You can delete this when you're done too. It's your config now! :)
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
-vim.g.mapleader = ' '
-vim.g.maplocalleader = ' '
+vim.g.mapleader = ','
+vim.g.maplocalleader = ','
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 -- See `:help vim.opt`
@@ -104,22 +104,47 @@ vim.opt.number = true
 --  Experiment for yourself to see if you like it!
 -- vim.opt.relativenumber = true
 
+-- Wrap lines
+vim.opt.wrap = false
+
+-- Toggle line wrap
+vim.keymap.set('n', '<leader>tw', ':set wrap!<CR>', { desc = '[T]oggle line [W]rap' })
+
 -- Enable mouse mode, can be useful for resizing splits for example!
-vim.opt.mouse = 'a'
+vim.opt.mouse = 'nv'
+vim.opt.mousemodel = 'extend'
 
 -- Don't show the mode, since it's already in the status line
 vim.opt.showmode = false
 
--- Sync clipboard between OS and Neovim.
+-- Sync clipboard between OS and Neovim with WSL yank support.
 --  Remove this option if you want your OS clipboard to remain independent.
 --  See `:help 'clipboard'`
-vim.opt.clipboard = 'unnamedplus'
+vim.opt.clipboard:append { 'unnamed', 'unnamedplus' }
+if vim.fn.has 'wsl' == 1 then
+  vim.cmd [[
+        augroup WSLClipboard
+            autocmd!
+            autocmd TextYankPost * if v:event.operator == 'y' && v:event.regname == '' | call system('clip.exe', @0) | endif
+        augroup END
+    ]]
+end
+
+-- Jumps to the last cursor position on file openning
+vim.cmd [[
+    autocmd BufReadPost *
+        \ if line("'\"") > 0 && line("'\"") <= line("$") |
+        \   exe "normal g'\"" |
+        \ endif
+]]
 
 -- Enable break indent
 vim.opt.breakindent = true
 
 -- Save undo history
 vim.opt.undofile = true
+vim.opt.undolevels = 1000
+vim.opt.undoreload = 10000
 
 -- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
 vim.opt.ignorecase = true
@@ -166,6 +191,32 @@ vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous [D]
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next [D]iagnostic message' })
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Show diagnostic [E]rror messages' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
+
+-- Move to the beginning of tabline
+vim.keymap.set('n', '0', '^', { noremap = true, silent = true })
+
+-- Don't lose yanked text after pasting
+vim.keymap.set('v', 'p', '"_dP', { noremap = true })
+
+-- Custom typos mappings
+vim.keymap.set('n', ':W', ':w', { noremap = true })
+vim.keymap.set('n', ':Q', ':q', { noremap = true })
+vim.keymap.set('n', 'q:', ':q', { noremap = true })
+vim.keymap.set('n', ':WQ', ':wq', { noremap = true })
+vim.keymap.set('n', ':wQ', ':wq', { noremap = true })
+vim.keymap.set('n', ':Wq', ':wq', { noremap = true })
+vim.keymap.set('n', ':Qa', ':qa', { noremap = true })
+vim.keymap.set('n', ':QA', ':qa', { noremap = true })
+vim.keymap.set('n', ':qA', ':qa', { noremap = true })
+
+-- Tab identification
+vim.keymap.set('n', '<S-Tab>', '<', { noremap = true })
+vim.keymap.set('i', '<S-Tab>', '<Esc><<i', { noremap = true })
+vim.keymap.set('v', '<S-Tab>', '<gv', { noremap = true })
+vim.keymap.set('v', '<Tab>', '>gv', { noremap = true })
+
+-- Unix Fileformat
+vim.opt.ffs:append { 'unix', 'dos' }
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
@@ -237,8 +288,9 @@ require('lazy').setup({
   --  This is equivalent to:
   --    require('Comment').setup({})
 
-  -- "gc" to comment visual regions/lines
-  { 'numToStr/Comment.nvim', opts = {} },
+  -- "<leader>cc" to comment visual regions/lines
+  -- "<leader>cu" to uncomment visual regions/lines
+  'preservim/nerdcommenter',
 
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`. This is equivalent to the following Lua:
@@ -556,7 +608,8 @@ require('lazy').setup({
       local servers = {
         -- clangd = {},
         -- gopls = {},
-        -- pyright = {},
+        pyright = {},
+        omnisharp = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
@@ -642,7 +695,7 @@ require('lazy').setup({
       formatters_by_ft = {
         lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
+        python = { 'isort', 'black' },
         --
         -- You can use a sub-list to tell conform to run *until* a formatter
         -- is found.
@@ -706,6 +759,8 @@ require('lazy').setup({
         --
         -- No, but seriously. Please read `:help ins-completion`, it is really good!
         mapping = cmp.mapping.preset.insert {
+          -- TODO: change this mappings AKI
+
           -- Select the [n]ext item
           ['<C-n>'] = cmp.mapping.select_next_item(),
           -- Select the [p]revious item
@@ -762,6 +817,7 @@ require('lazy').setup({
     --
     -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
     'folke/tokyonight.nvim',
+    --'ellisonleao/gruvbox.nvim',
     priority = 1000, -- Make sure to load this before all the other start plugins.
     init = function()
       -- Load the colorscheme here.
@@ -818,7 +874,7 @@ require('lazy').setup({
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     opts = {
-      ensure_installed = { 'bash', 'c', 'html', 'lua', 'luadoc', 'markdown', 'vim', 'vimdoc' },
+      ensure_installed = { 'bash', 'c_sharp', 'html', 'lua', 'luadoc', 'markdown', 'vim', 'vimdoc', 'json', 'yaml', 'xml', 'sql' },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
@@ -857,10 +913,14 @@ require('lazy').setup({
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
   -- require 'kickstart.plugins.debug',
-  -- require 'kickstart.plugins.indent_line',
+  require 'kickstart.plugins.indent_line',
   -- require 'kickstart.plugins.lint',
   -- require 'kickstart.plugins.autopairs',
-  -- require 'kickstart.plugins.neo-tree',
+  require 'kickstart.plugins.neo-tree',
+  require 'kickstart.plugins.lualine',
+  require 'kickstart.plugins.tabline',
+  require 'kickstart.plugins.easymotion',
+  require 'kickstart.plugins.copilot',
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
