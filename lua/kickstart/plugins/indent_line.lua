@@ -30,8 +30,8 @@ return {
     -- See `:help ibl`
     main = 'ibl',
     opts = {
-      indent = { highlight = highlight, char = '┊' },
-      --indent = { char = '┊' },
+      --indent = { highlight = highlight, char = '┊' },
+      indent = { char = '┊' },
       whitespace = {
         remove_blankline_trail = false,
       },
