@@ -290,7 +290,7 @@ require('lazy').setup({
 
   -- "<leader>cc" to comment visual regions/lines
   -- "<leader>cu" to uncomment visual regions/lines
-  'preservim/nerdcommenter',
+  --'preservim/nerdcommenter',
 
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`. This is equivalent to the following Lua:
@@ -340,13 +340,15 @@ require('lazy').setup({
         ['<leader>s'] = { name = '[S]earch', _ = 'which_key_ignore' },
         ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
         ['<leader>t'] = { name = '[T]oggle', _ = 'which_key_ignore' },
-        ['<leader>h'] = { name = 'Git [H]unk', _ = 'which_key_ignore' },
+        ['<leader>n'] = { name = '[N]eoTree', _ = 'which_key_ignore' },
+        --['<leader>h'] = { name = 'Git [H]unk', _ = 'which_key_ignore' },
         [':q'] = { name = '[Q]uit', _ = 'which_key_ignore' },
         [':w'] = { name = '[W]rite to disk', _ = 'which_key_ignore' },
       }
       -- visual mode
       require('which-key').register({
-        ['<leader>h'] = { 'Git [H]unk' },
+        --['<leader>h'] = { 'Git [H]unk' },
+        ['<leader>c'] = { '[C]ode' },
       }, { mode = 'v' })
     end,
   },
@@ -924,6 +926,7 @@ require('lazy').setup({
   require 'kickstart.plugins.tabline',
   require 'kickstart.plugins.easymotion',
   require 'kickstart.plugins.copilot',
+  require 'kickstart.plugins.nerdcommenter',
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
