@@ -1,7 +1,6 @@
-vim.keymap.set('n', '<c-n>', ':TablineBufferNext<CR>')
-vim.keymap.set('n', '<c-p>', ':TablineBufferPrevious<CR>')
-vim.keymap.set('n', '<leader>bc', ':bd<CR>')
-vim.keymap.set('n', '<c-w>', ':bd<CR>')
+vim.keymap.set('n', '<c-n>', ':TablineBufferNext<CR>', { desc = 'Move to the next buffer' })
+vim.keymap.set('n', '<c-p>', ':TablineBufferPrevious<CR>', { desc = 'Move to the previous buffer' })
+vim.keymap.set('n', '<leader>bc', ':bd<CR>', { desc = '[B]uffer [C]lose' })
 
 vim.cmd [[
   set guioptions-=e " Use showtabline in gui vim

@@ -199,15 +199,15 @@ vim.keymap.set('n', '0', '^', { noremap = true, silent = true })
 vim.keymap.set('v', 'p', '"_dP', { noremap = true })
 
 -- Custom typos mappings
-vim.keymap.set('n', ':W', ':w', { noremap = true })
-vim.keymap.set('n', ':Q', ':q', { noremap = true })
-vim.keymap.set('n', 'q:', ':q', { noremap = true })
-vim.keymap.set('n', ':WQ', ':wq', { noremap = true })
-vim.keymap.set('n', ':wQ', ':wq', { noremap = true })
-vim.keymap.set('n', ':Wq', ':wq', { noremap = true })
-vim.keymap.set('n', ':Qa', ':qa', { noremap = true })
-vim.keymap.set('n', ':QA', ':qa', { noremap = true })
-vim.keymap.set('n', ':qA', ':qa', { noremap = true })
+vim.keymap.set('n', ':W', ':w', { noremap = true, desc = '[W]rite to disk' })
+vim.keymap.set('n', ':Q', ':q', { noremap = true, desc = '[Q]uit' })
+vim.keymap.set('n', 'q:', ':q', { noremap = true, desc = '[Q]uit' })
+vim.keymap.set('n', ':WQ', ':wq', { noremap = true, desc = '[W]rite to disk & [Q]uit' })
+vim.keymap.set('n', ':wQ', ':wq', { noremap = true, desc = '[W]rite to disk & [Q]uit' })
+vim.keymap.set('n', ':Wq', ':wq', { noremap = true, desc = '[W]rite to disk & [Q]uit' })
+vim.keymap.set('n', ':Qa', ':qa', { noremap = true, desc = '[Q]uit [A]ll' })
+vim.keymap.set('n', ':QA', ':qa', { noremap = true, desc = '[Q]uit [A]ll' })
+vim.keymap.set('n', ':qA', ':qa', { noremap = true, desc = '[Q]uit [A]ll' })
 
 -- Tab identification
 vim.keymap.set('n', '<S-Tab>', '<', { noremap = true })
@@ -333,6 +333,7 @@ require('lazy').setup({
 
       -- Document existing key chains
       require('which-key').register {
+        ['<leader>b'] = { name = '[B]uffer', _ = 'which_key_ignore' },
         ['<leader>c'] = { name = '[C]ode', _ = 'which_key_ignore' },
         ['<leader>d'] = { name = '[D]ocument', _ = 'which_key_ignore' },
         ['<leader>r'] = { name = '[R]ename', _ = 'which_key_ignore' },
@@ -340,6 +341,8 @@ require('lazy').setup({
         ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
         ['<leader>t'] = { name = '[T]oggle', _ = 'which_key_ignore' },
         ['<leader>h'] = { name = 'Git [H]unk', _ = 'which_key_ignore' },
+        [':q'] = { name = '[Q]uit', _ = 'which_key_ignore' },
+        [':w'] = { name = '[W]rite to disk', _ = 'which_key_ignore' },
       }
       -- visual mode
       require('which-key').register({
@@ -433,7 +436,7 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
-      vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
+      vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[,] Find existing buffers' })
 
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set('n', '<leader>/', function()

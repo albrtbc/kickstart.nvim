@@ -4,7 +4,7 @@ vim.g.EasyMotion_inc_highlight = false
 vim.g.EasyMotion_disable_two_key_combo = true
 vim.g.EasyMotion_keys = 'abcdefhjkmnoprstuvwxyz;'
 
-vim.keymap.set('n', 'f', '<plug>(easymotion-s2)')
+vim.keymap.set('n', 'f', '<plug>(easymotion-s2)', { desc = 'Search for the first 2 char' })
 
 return {
   'easymotion/vim-easymotion',
