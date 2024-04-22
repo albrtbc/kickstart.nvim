@@ -122,12 +122,20 @@ vim.opt.showmode = false
 --  See `:help 'clipboard'`
 vim.opt.clipboard:append { 'unnamed', 'unnamedplus' }
 if vim.fn.has 'wsl' == 1 then
-  vim.cmd [[
-        augroup WSLClipboard
-            autocmd!
-            autocmd TextYankPost * if v:event.operator == 'y' && v:event.regname == '' | call system('clip.exe', @0) | endif
-        augroup END
-    ]]
+  vim.api.nvim_create_augroup('WSLClipboard', { clear = true })
+  vim.api.nvim_create_autocmd('TextYankPost', {
+    group = 'WSLClipboard',
+    pattern = '*',
+    callback = function()
+      if vim.v.event.operator == 'y' and vim.v.event.regname == '' then
+        local reg_contents = vim.fn.getreg '0'
+        -- Asegurarse de limpiar los caracteres de retorno de carro
+        reg_contents = reg_contents:gsub('\r\n', '\n')
+        -- Usar win32yank para enviar al portapapeles de Windows
+        vim.fn.system('win32yank -i', reg_contents)
+      end
+    end,
+  })
 end
 
 -- Jumps to the last cursor position on file openning
