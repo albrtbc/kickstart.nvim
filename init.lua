@@ -201,7 +201,22 @@ vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Show diagn
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
 -- Move to the beginning of tabline
-vim.keymap.set('n', '0', '^', { noremap = true, silent = true })
+function Toggle_zero()
+  -- Get the current cursor position: (row, column)
+  local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+
+  -- Check if the column is zero, i.e., the start of the line
+  if col == 0 then
+    -- Move the cursor to the first non-blank character of the line
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('^', true, false, true), 'n', false)
+  else
+    -- Move the cursor to the start of the line
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('0', true, false, true), 'n', false)
+  end
+end
+
+-- Map the function to the desired key shortcut
+vim.api.nvim_set_keymap('n', '0', '<cmd>lua Toggle_zero()<CR>', { noremap = true, silent = true })
 
 -- Don't lose yanked text after pasting
 vim.keymap.set('v', 'p', '"_dP', { noremap = true })
