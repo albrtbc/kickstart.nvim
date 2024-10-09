@@ -351,29 +351,27 @@ require('lazy').setup({
   { -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'
-    config = function() -- This is the function that runs, AFTER loading
-      require('which-key').setup()
+    opts = {
+      icons = {
+        -- set icon mappings to true if you have a Nerd Font
+        mappings = false,
+      },
 
       -- Document existing key chains
-      require('which-key').register {
-        ['<leader>b'] = { name = '[B]uffer', _ = 'which_key_ignore' },
-        ['<leader>c'] = { name = '[C]ode', _ = 'which_key_ignore' },
-        ['<leader>d'] = { name = '[D]ocument', _ = 'which_key_ignore' },
-        ['<leader>r'] = { name = '[R]ename', _ = 'which_key_ignore' },
-        ['<leader>s'] = { name = '[S]earch', _ = 'which_key_ignore' },
-        ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
-        ['<leader>t'] = { name = '[T]oggle', _ = 'which_key_ignore' },
-        ['<leader>n'] = { name = '[N]eoTree', _ = 'which_key_ignore' },
-        --['<leader>h'] = { name = 'Git [H]unk', _ = 'which_key_ignore' },
-        [':q'] = { name = '[Q]uit', _ = 'which_key_ignore' },
-        [':w'] = { name = '[W]rite to disk', _ = 'which_key_ignore' },
-      }
-      -- visual mode
-      require('which-key').register({
-        --['<leader>h'] = { 'Git [H]unk' },
-        ['<leader>c'] = { '[C]ode' },
-      }, { mode = 'v' })
-    end,
+      spec = {
+        { '<leader>b', group = '[B]uffer' },
+        { '<leader>c', group = '[C]ode', mode = { 'n', 'x' } },
+        { '<leader>d', group = '[D]ocument' },
+        { '<leader>r', group = '[R]ename' },
+        { '<leader>s', group = '[S]earch' },
+        { '<leader>w', group = '[W]orkspace' },
+        { '<leader>t', group = '[T]oggle' },
+        { '<leader>t', group = '[T]oggle' },
+        { '<leader>n', group = '[N]eoTree' },
+        { ':q', group = '[Q]uit' },
+        { ':w', group = '[W]rite to disk' },
+      },
+    },
   },
 
   -- NOTE: Plugins can specify dependencies.
