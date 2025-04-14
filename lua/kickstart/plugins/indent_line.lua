@@ -31,7 +31,7 @@ return {
     main = 'ibl',
     opts = {
       --indent = { highlight = highlight, char = '┊' },
-      indent = { char = '┊' },
+      indent = { char = { '┊' } },
       whitespace = {
         remove_blankline_trail = false,
       },
