@@ -121,9 +121,7 @@ vim.o.showmode = false
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
 --  Remove this option if you want your OS clipboard to remain independent.
 --  See `:help 'clipboard'`
-vim.schedule(function()
-  vim.opt.clipboard:append { 'unnamed', 'unnamedplus' }
-end)
+vim.schedule(function() vim.opt.clipboard:append { 'unnamed', 'unnamedplus' } end)
 if vim.fn.has 'wsl' == 1 then
   vim.api.nvim_create_augroup('WSLClipboard', { clear = true })
   vim.api.nvim_create_autocmd('TextYankPost', {
@@ -699,7 +697,7 @@ require('lazy').setup({
       -- You can press `g?` for help in this menu.
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
-        'lua_ls', -- Lua Language server
+        'lua-language-server', -- Lua Language server
         'stylua', -- Used to format Lua code
         -- You can add other tools here that you want Mason to install
       })
@@ -939,7 +937,23 @@ require('lazy').setup({
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     opts = {
-      ensure_installed = { 'bash', 'c_sharp', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'json', 'yaml', 'xml', 'sql' },
+      ensure_installed = {
+        'bash',
+        'c_sharp',
+        'diff',
+        'html',
+        'lua',
+        'luadoc',
+        'markdown',
+        'markdown_inline',
+        'query',
+        'vim',
+        'vimdoc',
+        'json',
+        'yaml',
+        'xml',
+        'sql',
+      },
       auto_install = true,
       highlight = { enable = true },
       indent = { enable = true },
