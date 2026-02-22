@@ -935,32 +935,27 @@ require('lazy').setup({
 
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
-    build = ':TSUpdate',
-    opts = {
-      ensure_installed = {
-        'bash',
-        'c_sharp',
-        'diff',
-        'html',
-        'lua',
-        'luadoc',
-        'markdown',
-        'markdown_inline',
-        'query',
-        'vim',
-        'vimdoc',
-        'json',
-        'yaml',
-        'xml',
-        'sql',
-      },
-      auto_install = true,
-      highlight = { enable = true },
-      indent = { enable = true },
-    },
-    config = function(_, opts)
-      ---@diagnostic disable-next-line: missing-fields
-      require('nvim-treesitter.configs').setup(opts)
+    config = function()
+      local filetypes = { 'bash', 'c_sharp', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'json', 'yaml', 'xml', 'sql' }
+
+      -- New API (nvim-treesitter >= 1.0, Neovim >= 0.11)
+      local ok, ts = pcall(require, 'nvim-treesitter')
+      if ok and ts.install then
+        ts.install(filetypes)
+        vim.api.nvim_create_autocmd('FileType', {
+          pattern = filetypes,
+          callback = function() vim.treesitter.start() end,
+        })
+      else
+        -- Legacy API (older nvim-treesitter)
+        ---@diagnostic disable-next-line: missing-fields
+        require('nvim-treesitter.configs').setup {
+          ensure_installed = filetypes,
+          auto_install = true,
+          highlight = { enable = true },
+          indent = { enable = true },
+        }
+      end
     end,
   },
 
